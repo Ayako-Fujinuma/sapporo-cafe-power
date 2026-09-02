@@ -1,4 +1,5 @@
 export type PowerLevel = "full" | "partial" | "counter";
+export type Category = "cafe" | "coworking";
 
 export type Cafe = {
   id: string;
@@ -13,12 +14,18 @@ export type Cafe = {
   seats?: number;
   tags: string[];
   note: string;
+  category: Category;
 };
 
 export const POWER_LEVEL_LABEL: Record<PowerLevel, string> = {
   full: "全席に電源あり",
   partial: "一部の席に電源あり",
   counter: "カウンター席のみ電源あり",
+};
+
+export const CATEGORY_LABEL: Record<Category, string> = {
+  cafe: "カフェ",
+  coworking: "コワーキングスペース",
 };
 
 // スプレッドシートに接続できなかった場合に表示するフォールバックデータ。
@@ -34,6 +41,7 @@ export const FALLBACK_CAFES: Cafe[] = [
     hours: "8:00〜20:00",
     tags: ["全席電源", "USB充電", "作業向き"],
     note: "個別プラグとUSB充電が各席にあり、長時間の作業にも向いていると評判。",
+    category: "cafe",
   },
   {
     id: "poool-espresso-work",
@@ -48,6 +56,7 @@ export const FALLBACK_CAFES: Cafe[] = [
     seats: 70,
     tags: ["書店併設", "全席禁煙", "座席広め"],
     note: "書店併設のブックカフェ。ワーキングカウンター・テーブル・ソファ席など座席の種類が豊富。",
+    category: "cafe",
   },
   {
     id: "neighbour-roast-brew",
@@ -60,6 +69,7 @@ export const FALLBACK_CAFES: Cafe[] = [
     hours: "9:00〜23:00",
     tags: ["ホテル併設", "静か", "クラフトビール"],
     note: "ホテル併設で落ち着いた雰囲気。クラフトビール醸造所併設で、夜まで長居しやすい。",
+    category: "cafe",
   },
   {
     id: "bonsalute-cafe",
@@ -73,6 +83,7 @@ export const FALLBACK_CAFES: Cafe[] = [
     seats: 91,
     tags: ["ホテル内", "見晴らし良好"],
     note: "ホテルグレイスリー内。営業時間が限定的なので訪問前に公式サイトでの確認がおすすめ。",
+    category: "cafe",
   },
   {
     id: "benkyo-cafe-odori",
@@ -85,6 +96,7 @@ export const FALLBACK_CAFES: Cafe[] = [
     hours: "会員制(利用時間は要問い合わせ)",
     tags: ["会員制", "長時間OK", "コワーキング"],
     note: "会員制のコワーキング系スペース。仕切りのあるワークスペースやフリードリンクがあり、長時間の作業に特化。",
+    category: "coworking",
   },
   {
     id: "canvas-lounge-kokage",
@@ -97,6 +109,7 @@ export const FALLBACK_CAFES: Cafe[] = [
     hours: "10:00〜23:00",
     tags: ["公園ビュー", "おしゃれ"],
     note: "大通公園ビューでおしゃれな雰囲気。落ち着いて作業したい人向け。",
+    category: "cafe",
   },
   {
     id: "todai-coffee",
@@ -111,6 +124,7 @@ export const FALLBACK_CAFES: Cafe[] = [
     seats: 37,
     tags: ["本が読める", "広々"],
     note: "37席と広々としたカフェスペースで、置いてある本を自由に読める貸し本コーナーあり。",
+    category: "cafe",
   },
   {
     id: "tullys-stellar-place",
@@ -124,6 +138,7 @@ export const FALLBACK_CAFES: Cafe[] = [
     seats: 70,
     tags: ["駅直結", "アクセス良好"],
     note: "駅直結で天候を気にせずアクセスできるのが魅力。70席と広め。",
+    category: "cafe",
   },
   {
     id: "cafe-croissant-apia",
@@ -137,6 +152,7 @@ export const FALLBACK_CAFES: Cafe[] = [
     seats: 108,
     tags: ["朝から営業", "焼きたてパン"],
     note: "焼きたてのパンとサンドイッチが人気。108席あり朝から夜まで使いやすい。",
+    category: "cafe",
   },
   {
     id: "komeda-tanukikoji2",
@@ -150,6 +166,7 @@ export const FALLBACK_CAFES: Cafe[] = [
     seats: 84,
     tags: ["モーニングあり", "分煙"],
     note: "モーニングサービスあり、分煙で作業しやすい。すすきの・大通エリアで長居しやすい定番店。",
+    category: "cafe",
   },
   {
     id: "hotel-potmum",
@@ -163,6 +180,7 @@ export const FALLBACK_CAFES: Cafe[] = [
     hours: "7:30〜20:00頃(情報源により21:00までとの記載もあり要確認)",
     tags: ["天井高5m", "蔵書1000冊以上"],
     note: "天井高5メートルを超える開放的な空間と1,000冊以上の蔵書が魅力。ホテル1階のカフェスペース。",
+    category: "cafe",
   },
   {
     id: "morihiko-stay-coffee",
@@ -176,5 +194,6 @@ export const FALLBACK_CAFES: Cafe[] = [
     seats: 50,
     tags: ["自家焙煎", "地元食材"],
     note: "自社焙煎コーヒーと地元食材を使った料理が楽しめる。50席以上と余裕のある空間。",
+    category: "cafe",
   },
 ];

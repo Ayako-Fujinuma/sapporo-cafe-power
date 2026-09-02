@@ -1,4 +1,4 @@
-import { FALLBACK_CAFES, type Cafe, type PowerLevel } from "./cafes";
+import { FALLBACK_CAFES, type Cafe, type Category, type PowerLevel } from "./cafes";
 
 // Googleスプレッドシートの「ファイル > 共有 > 埋め込みリンクの取得」で発行される
 // CSVエクスポートURL(/export?format=csv&gid=...)を設定する。
@@ -54,6 +54,10 @@ function normalizePowerLevel(raw: string): PowerLevel {
   return "partial";
 }
 
+function normalizeCategory(raw: string): Category {
+  return raw.includes("コワーキング") ? "coworking" : "cafe";
+}
+
 function slugify(name: string, index: number): string {
   const ascii = name
     .toLowerCase()
@@ -68,31 +72,40 @@ function rowsToCafes(rows: string[][]): Cafe[] {
   const header = rows[0].map((h) => h.trim());
   const colIndex = (name: string) => header.indexOf(name);
 
-  return rows.slice(1).map((cells, index) => {
-    const get = (name: string) => {
-      const i = colIndex(name);
-      return i === -1 ? "" : (cells[i] ?? "").trim();
-    };
+  return rows
+    .slice(1)
+    .filter((cells) => {
+      const i = colIndex("有効");
+      // 「有効」列が明示的に「無効」の行だけ除外する(列が無い/空欄なら表示する)
+      return i === -1 || (cells[i] ?? "").trim() !== "無効";
+    })
+    .map((cells, index): Cafe => {
+      const get = (name: string) => {
+        const i = colIndex(name);
+        return i === -1 ? "" : (cells[i] ?? "").trim();
+      };
 
-    const name = get("店名");
-    const seatsRaw = get("座席数");
-    const tagsRaw = get("タグ");
+      const name = get("店名");
+      const seatsRaw = get("座席数");
+      const tagsRaw = get("タグ");
 
-    return {
-      id: slugify(name, index),
-      name,
-      area: get("エリア"),
-      nearestStation: get("最寄り駅"),
-      address: get("住所") || undefined,
-      power: get("電源"),
-      powerLevel: normalizePowerLevel(get("電源レベル")),
-      wifi: get("Wi-Fi"),
-      hours: get("営業時間"),
-      seats: seatsRaw ? Number(seatsRaw) || undefined : undefined,
-      tags: tagsRaw ? tagsRaw.split("/").map((t) => t.trim()).filter(Boolean) : [],
-      note: get("備考"),
-    };
-  }).filter((cafe) => cafe.name !== "");
+      return {
+        id: slugify(name, index),
+        name,
+        area: get("エリア"),
+        nearestStation: get("最寄り駅"),
+        address: get("住所") || undefined,
+        power: get("電源"),
+        powerLevel: normalizePowerLevel(get("電源レベル")),
+        wifi: get("Wi-Fi"),
+        hours: get("営業時間"),
+        seats: seatsRaw ? Number(seatsRaw) || undefined : undefined,
+        tags: tagsRaw ? tagsRaw.split("/").map((t) => t.trim()).filter(Boolean) : [],
+        note: get("備考"),
+        category: normalizeCategory(get("種別")),
+      };
+    })
+    .filter((cafe) => cafe.name !== "");
 }
 
 export async function fetchCafes(): Promise<{ cafes: Cafe[]; source: "sheet" | "fallback" }> {

@@ -5,7 +5,7 @@ export default async function Home() {
   const { cafes } = await fetchCafes();
 
   return (
-    <main className="min-h-screen bg-neutral-50 px-6 py-12">
+    <main className="min-h-screen bg-amber-50 px-6 py-12">
       <div className="mx-auto max-w-3xl">
         <header className="relative mb-10 overflow-hidden rounded-2xl bg-[url('/top_image_sp.jpeg')] bg-cover bg-center text-center text-white shadow-sm md:bg-[url('/top_image_pc.jpeg')]">
           <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/35 to-black/60" />
