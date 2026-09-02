@@ -170,7 +170,7 @@ export default function CafeDirectory({ cafes }: { cafes: Cafe[] }) {
                 </div>
               </div>
 
-              <dl className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
+              <dl className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 <div>
                   <dt className="text-xs text-neutral-400">電源</dt>
                   <dd className="text-sm font-medium text-neutral-800">{cafe.power}</dd>
@@ -182,6 +182,12 @@ export default function CafeDirectory({ cafes }: { cafes: Cafe[] }) {
                 <div>
                   <dt className="text-xs text-neutral-400">営業時間</dt>
                   <dd className="text-sm font-medium text-neutral-800">{cafe.hours}</dd>
+                </div>
+                <div>
+                  <dt className="text-xs text-neutral-400">座席数</dt>
+                  <dd className="text-sm font-medium text-neutral-800">
+                    {cafe.seats ? `${cafe.seats}席` : "記載なし"}
+                  </dd>
                 </div>
               </dl>
 
