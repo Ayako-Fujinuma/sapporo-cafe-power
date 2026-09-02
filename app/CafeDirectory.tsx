@@ -1,7 +1,13 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { POWER_LEVEL_LABEL, type Cafe, type PowerLevel } from "@/lib/cafes";
+import {
+  CATEGORY_LABEL,
+  POWER_LEVEL_LABEL,
+  type Category,
+  type Cafe,
+  type PowerLevel,
+} from "@/lib/cafes";
 
 const POWER_BADGE_STYLE: Record<Cafe["powerLevel"], string> = {
   full: "bg-emerald-100 text-emerald-800",
@@ -9,7 +15,13 @@ const POWER_BADGE_STYLE: Record<Cafe["powerLevel"], string> = {
   counter: "bg-sky-100 text-sky-800",
 };
 
+const CATEGORY_BADGE_STYLE: Record<Category, string> = {
+  cafe: "bg-orange-100 text-orange-800",
+  coworking: "bg-indigo-100 text-indigo-800",
+};
+
 const POWER_LEVELS: PowerLevel[] = ["full", "partial", "counter"];
+const CATEGORIES: Category[] = ["cafe", "coworking"];
 
 function getGoogleMapsUrl(cafe: Cafe): string {
   const query = [cafe.name, cafe.address || cafe.nearestStation, "札幌"]
@@ -21,6 +33,7 @@ function getGoogleMapsUrl(cafe: Cafe): string {
 export default function CafeDirectory({ cafes }: { cafes: Cafe[] }) {
   const [area, setArea] = useState<string | null>(null);
   const [powerLevels, setPowerLevels] = useState<PowerLevel[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const areas = useMemo(
     () => Array.from(new Set(cafes.map((cafe) => cafe.area))),
@@ -33,19 +46,26 @@ export default function CafeDirectory({ cafes }: { cafes: Cafe[] }) {
     );
   }
 
+  function toggleCategory(category: Category) {
+    setCategories((prev) =>
+      prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category],
+    );
+  }
+
   const filtered = useMemo(() => {
     return cafes.filter((cafe) => {
       if (area && cafe.area !== area) return false;
       if (powerLevels.length > 0 && !powerLevels.includes(cafe.powerLevel)) return false;
+      if (categories.length > 0 && !categories.includes(cafe.category)) return false;
       return true;
     });
-  }, [area, powerLevels, cafes]);
+  }, [area, powerLevels, categories, cafes]);
 
   return (
     <div>
-      <div className="mb-4">
-        <p className="mb-2 text-xs font-medium text-neutral-500">エリア</p>
-        <div className="flex flex-wrap gap-2">
+      <div className="mb-6 space-y-3 rounded-xl border border-neutral-200 bg-white/70 p-4">
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="w-16 shrink-0 text-xs text-neutral-400">エリア</p>
           <button
             type="button"
             onClick={() => setArea(null)}
@@ -72,11 +92,27 @@ export default function CafeDirectory({ cafes }: { cafes: Cafe[] }) {
             </button>
           ))}
         </div>
-      </div>
 
-      <div className="mb-8">
-        <p className="mb-2 text-xs font-medium text-neutral-500">電源(複数選択可)</p>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="w-16 shrink-0 text-xs text-neutral-400">種別</p>
+          {CATEGORIES.map((category) => (
+            <button
+              key={category}
+              type="button"
+              onClick={() => toggleCategory(category)}
+              className={`rounded-full border px-3 py-1 text-sm transition-colors ${
+                categories.includes(category)
+                  ? "border-neutral-800 bg-neutral-800 text-white"
+                  : "border-neutral-300 bg-white text-neutral-600 hover:border-neutral-400"
+              }`}
+            >
+              {CATEGORY_LABEL[category]}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="w-16 shrink-0 text-xs text-neutral-400">電源</p>
           {POWER_LEVELS.map((level) => (
             <button
               key={level}
@@ -120,25 +156,32 @@ export default function CafeDirectory({ cafes }: { cafes: Cafe[] }) {
                     {cafe.address ? ` ・ ${cafe.address}` : ""}
                   </p>
                 </div>
-                <span
-                  className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium ${POWER_BADGE_STYLE[cafe.powerLevel]}`}
-                >
-                  {POWER_LEVEL_LABEL[cafe.powerLevel]}
-                </span>
+                <div className="flex shrink-0 flex-col items-end gap-1.5">
+                  <span
+                    className={`rounded-full px-3 py-1 text-xs font-medium ${CATEGORY_BADGE_STYLE[cafe.category]}`}
+                  >
+                    {CATEGORY_LABEL[cafe.category]}
+                  </span>
+                  <span
+                    className={`rounded-full px-3 py-1 text-xs font-medium ${POWER_BADGE_STYLE[cafe.powerLevel]}`}
+                  >
+                    {POWER_LEVEL_LABEL[cafe.powerLevel]}
+                  </span>
+                </div>
               </div>
 
-              <dl className="mt-4 grid grid-cols-1 gap-2 text-sm text-neutral-600 sm:grid-cols-3">
+              <dl className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
                 <div>
-                  <dt className="font-medium text-neutral-700">電源</dt>
-                  <dd>{cafe.power}</dd>
+                  <dt className="text-xs text-neutral-400">電源</dt>
+                  <dd className="text-sm font-medium text-neutral-800">{cafe.power}</dd>
                 </div>
                 <div>
-                  <dt className="font-medium text-neutral-700">Wi-Fi</dt>
-                  <dd>{cafe.wifi}</dd>
+                  <dt className="text-xs text-neutral-400">Wi-Fi</dt>
+                  <dd className="text-sm font-medium text-neutral-800">{cafe.wifi}</dd>
                 </div>
                 <div>
-                  <dt className="font-medium text-neutral-700">営業時間</dt>
-                  <dd>{cafe.hours}</dd>
+                  <dt className="text-xs text-neutral-400">営業時間</dt>
+                  <dd className="text-sm font-medium text-neutral-800">{cafe.hours}</dd>
                 </div>
               </dl>
 
@@ -157,10 +200,12 @@ export default function CafeDirectory({ cafes }: { cafes: Cafe[] }) {
 
               <p className="mt-4 text-sm text-neutral-600">{cafe.note}</p>
 
-              <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-neutral-700">
-                Googleマップで見る
-                <span aria-hidden="true">→</span>
-              </span>
+              <div className="mt-4 flex justify-end">
+                <span className="inline-flex items-center gap-1.5 text-sm font-medium text-neutral-700">
+                  Googleマップで見る
+                  <span aria-hidden="true">→</span>
+                </span>
+              </div>
             </a>
           ))}
         </div>
