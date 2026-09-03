@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -16,7 +17,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 const SITE_NAME = "さっぽろ電源カフェナビ";
 const SITE_TITLE = "さっぽろ電源カフェナビ｜札幌のカフェで使える電源・Wi-Fiスポット";
 const SITE_DESCRIPTION =
-  "札幌市内で電源が使えるカフェ・コワーキングスペースをスポットです。作業や勉強にぴったりなスポットをエリア別に検索できます。";
+  "札幌市内で電源が使えるカフェ・コワーキングスペースをまとめました。作業や勉強にぴったりなスポットをエリア別に検索できます。";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -45,7 +46,20 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="ja"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <footer className="bg-amber-50 px-6 py-8 text-center text-xs text-neutral-400">
+          <nav className="mb-2 flex justify-center gap-4">
+            <Link href="/privacy" className="hover:text-neutral-600">
+              プライバシーポリシー
+            </Link>
+            <Link href="/contact" className="hover:text-neutral-600">
+              お問い合わせ
+            </Link>
+          </nav>
+          <p>© {new Date().getFullYear()} さっぽろ電源カフェナビ</p>
+        </footer>
+      </body>
     </html>
   );
 }
