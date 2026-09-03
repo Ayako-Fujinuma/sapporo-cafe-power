@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
+import SiteHeader from "./SiteHeader";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -47,9 +48,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <SiteHeader />
         {children}
         <footer className="bg-amber-50 px-6 py-8 text-center text-xs text-neutral-400">
           <nav className="mb-2 flex justify-center gap-4">
+            <Link href="/about" className="hover:text-neutral-600">
+              運営者情報
+            </Link>
             <Link href="/privacy" className="hover:text-neutral-600">
               プライバシーポリシー
             </Link>
