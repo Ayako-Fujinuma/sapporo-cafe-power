@@ -47,15 +47,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="ja"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <head>
-        {/* Next.jsのnext/scriptだとJS経由での挿入になり、AdSenseのサイト確認クローラーが
-            生HTML上でタグを検出できないため、あえて素の<script>タグを直接置いている。 */}
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3246099949879278"
-          crossOrigin="anonymous"
-        />
-      </head>
       <body className="min-h-full flex flex-col">
         <SiteHeader />
         {children}

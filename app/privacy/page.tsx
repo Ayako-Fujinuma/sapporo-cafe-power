@@ -19,39 +19,6 @@ export default function PrivacyPage() {
 
           <section>
             <h2 className="mb-2 text-base font-semibold text-neutral-800">
-              広告の配信について
-            </h2>
-            <p>
-              当サイトは、第三者配信の広告サービス「Google
-              AdSense」を利用しています。Google
-              AdSenseを含む第三者配信事業者は、Cookie(クッキー)を使用して、ユーザーが当サイトや他のサイトに過去にアクセスした際の情報に基づいて広告を配信することがあります。
-            </p>
-            <p className="mt-2">
-              Cookieを無効にする方法や、Google
-              AdSenseに関する詳細については、
-              <a
-                href="https://policies.google.com/technologies/ads?hl=ja"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-700 underline"
-              >
-                Google広告 – ポリシーと規約
-              </a>
-              をご確認ください。パーソナライズ広告を無効にしたい場合は、
-              <a
-                href="https://adssettings.google.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-700 underline"
-              >
-                広告設定
-              </a>
-              から変更できます。
-            </p>
-          </section>
-
-          <section>
-            <h2 className="mb-2 text-base font-semibold text-neutral-800">
               アクセス解析ツールについて
             </h2>
             <p>
